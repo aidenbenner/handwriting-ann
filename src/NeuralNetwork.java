@@ -113,7 +113,7 @@ public class NeuralNetwork extends JPanel {
 			
 			for(int k = 0; k<error.length; k++){
 				for(int j = 0; j<neurons[i].length; j++){
-					neurons[i][j].adjustWeights(error[k], k, LEARNING_CONSTANT);
+					neurons[i][j].adjustWeights(LEARNING_CONSTANT);
 				}
 			}
 
