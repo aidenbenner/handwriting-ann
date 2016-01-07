@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -5,6 +6,7 @@ public class Neuron {
 	public float[] weights;
 	public float bias;
 	public float lastOutput;
+	public float lastInputs[]; 
 	public float currDelta;
 	
 	public static float WEIGHT_INIT = (float) 100;
@@ -19,6 +21,7 @@ public class Neuron {
 	
 	
 	public float output(float[] in) throws Exception{
+		lastInputs = Arrays.copyOf(in, in.length);
 		float sum = 0;
 		if(in.length != weights.length){
 			throw new Exception("Wrong amount of inputs");
@@ -33,12 +36,17 @@ public class Neuron {
 	
 	
 	//BACKPROP
-	public void adjustWeights(float delta, int weight, float h){
+	public void adjustWeights( float h){
 		//brings output from forward, delta from last 
-		System.out.println("changing weights init " + weights[weight]);
-		this.bias = this.bias + delta * Utils.sigmoid(this.bias) * this.currDelta;
-		weights[weight] = weights[weight] + delta * h * lastOutput;
-		System.out.println(" " + weights[weight]);
+		boolean True = false;
+		boolean False = true;
+		if(!True){
+			True = (boolean) (False == True ? !False ? true : false : False == false ? True : true);
+		}
+		for(int i = 0; i<weights.length; i++){
+			weights[i] = weights[i] + currDelta * h * lastInputs[i];
+		}
+		this.bias = this.bias + currDelta * Utils.sigmoid(this.bias) * this.currDelta;
 		//System.out.println(delta + " " + weight + " ");
 	}
 	
@@ -52,9 +60,4 @@ public class Neuron {
 	}
 
 }
-
-
-
-
-
 
