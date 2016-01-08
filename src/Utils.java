@@ -1,11 +1,11 @@
 
 public class Utils {
 	
-	public static float sigmoid(float in){
-		return sigmoid(in, 1);
+	public static float sigmoid(double d){
+		return sigmoid(d, 1);
 	}
 	
-	public static float sigmoid(float in, float bias){
+	public static float sigmoid(double in, double bias){
 		return (float) (1 / (1 + Math.pow(Math.E, -(bias * in))));
 	}
 	
