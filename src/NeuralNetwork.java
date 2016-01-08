@@ -10,7 +10,7 @@ public class NeuralNetwork extends JPanel {
 	Neuron[][] neurons;
 	
 	//learning constant
-	float LEARNING_CONSTANT  = (float) 0.1;
+	double LEARNING_CONSTANT  = (double) 0.2;
 	
 	public NeuralNetwork(int layers, int neuronsPerLayer, int inputs, int outputs){
 		//init number of neurons according to the number of layers and neurons per layer
@@ -60,8 +60,8 @@ public class NeuralNetwork extends JPanel {
 		}
 	}
 	
-	public float[] getLayerOutput(float[] input, int layer) throws Exception{
-		float[] output = new float[neurons[layer].length];
+	public double[] getLayerOutput(double[] input, int layer) throws Exception{
+		double[] output = new double[neurons[layer].length];
 		//System.out.println(neurons[layer].length);
 		//System.out.println(output.length);
 	
@@ -74,11 +74,10 @@ public class NeuralNetwork extends JPanel {
 		return output;
 	}
 	
-	public float[] getResult(float[] input) throws Exception{
+	public double[] getResult(double[] input) throws Exception{
 		//first run the inputs through the first layer 
 		int layers = neurons.length;
-		int neuronsPerLayer = neurons[0].length;
-		float[] currInput = input;
+		double[] currInput = input;
 		for(int i = 0; i<layers; i++){
 			//for each layer 
 			currInput = getLayerOutput(currInput,i);			
@@ -86,29 +85,31 @@ public class NeuralNetwork extends JPanel {
 		return currInput;
 	}
 	
-	public void train(float[] input, float[] target) throws Exception{
+	public void train(double[] input, double[] target) throws Exception{
 		//first run the inputs through the first layer 
-		float[] actual = getResult(input);
-		float[] error = new float[actual.length];
+		double[] actual = getResult(input);
+		double[] error = new double[actual.length];
 		//System.out.println(actual[0]);
 		
 		//calculate error for each output node 
 		for(int i = 0; i<actual.length; i++){
 			error[i] = actual[i] * (1-actual[i]) * (target[i] - actual[i]);
-			//System.out.println(error[i]);
+			//System.out.println(error[i]);	
+			
+			neurons[neurons.length-1][i].adjustWeights(LEARNING_CONSTANT);
 		}
 		
 		
 		
 		//change middle layer weights 
-		for(int i = neurons.length-1; i>=0; i--){
-			System.out.println("LAYER " + i);
+		for(int i = neurons.length-2; i>=0; i--){
+	
 		//	System.out.println("layer " + i);
 			 //calculate error for the next layer
-			float[] nextError = new float[neurons[i].length];
+			double[] nextError = new double[neurons[i].length];
 			for(int j = 0; j<neurons[i].length; j++){
-				nextError[j] = neurons[i][j].getDelta(error);
-				System.out.println(nextError[j]);
+				nextError[j] = neurons[i][j].getDelta(error, neurons[i+1], j);
+		
 			}
 			
 			for(int k = 0; k<error.length; k++){
