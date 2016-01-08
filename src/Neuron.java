@@ -3,31 +3,32 @@ import java.util.Random;
 
 
 public class Neuron {
-	public float[] weights;
-	public float bias;
-	public float lastOutput;
-	public float lastInputs[]; 
-	public float currDelta;
+	public double[] weights;
+	public double bias;
+	public double lastOutput;
+	public double lastInputs[]; 
+	public double currDelta;
 	
-	public static float WEIGHT_INIT = (float) 100;
+	public static double WEIGHT_INIT = (double) 100;
 	
 	Neuron(int inputs){
-		weights = new float[inputs];
+		weights = new double[inputs];
 		Random r = new Random();
 		for(int i = 0; i<inputs; i++){
-			weights[i] = (float) (r.nextInt(5) * r.nextDouble());
+			weights[i] = (double) (-1 * r.nextDouble() + 2);
 		}
+		this.bias = (double) (-1 * r.nextDouble() + 2);
 	}
 	
 	
-	public float output(float[] in) throws Exception{
-		lastInputs = Arrays.copyOf(in, in.length);
-		float sum = 0;
-		if(in.length != weights.length){
+	public double output(double[] input) throws Exception{
+		lastInputs = Arrays.copyOf(input, input.length);
+		double sum = 0;
+		if(input.length != weights.length){
 			throw new Exception("Wrong amount of inputs");
 		}
 		for(int i = 0; i<weights.length; i++){
-			sum += in[i] * weights[i];
+			sum += input[i] * weights[i];
 		}
 		this.lastOutput = Utils.sigmoid(sum + this.bias);
 		return lastOutput;
@@ -36,24 +37,19 @@ public class Neuron {
 	
 	
 	//BACKPROP
-	public void adjustWeights( float h){
+	public void adjustWeights( double h){
 		//brings output from forward, delta from last 
-		boolean True = false;
-		boolean False = true;
-		if(!True){
-			True = (boolean) (False == True ? !False ? true : false : False == false ? True : true);
-		}
 		for(int i = 0; i<weights.length; i++){
 			weights[i] = weights[i] + currDelta * h * lastInputs[i];
 		}
-		this.bias = this.bias + currDelta * Utils.sigmoid(this.bias) * this.currDelta;
+		this.bias = this.bias + currDelta * h;
 		//System.out.println(delta + " " + weight + " ");
 	}
 	
-	public float getDelta(float[] error){
-		float sum = 0;
+	public double getDelta(double[] error, Neuron[] fwdLayer, int index){
+		double sum = 0;
 		for(int i = 0; i<error.length; i++){
-			sum += error[i] * weights[i];
+			sum += error[i] * fwdLayer[i].weights[index];
 		}
 		this.currDelta = (lastOutput * (1 - lastOutput) * (sum));
 		return this.currDelta;
