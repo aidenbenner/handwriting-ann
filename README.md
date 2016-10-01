@@ -27,7 +27,7 @@ decreasing the learning constant so the network can converge on the ideal weight
 backpropagation algorithm I tried training it on a sine function in order to debug and to tune the network and learning
 constant, and received very positive results (see appendix).
 
-~~~
+~~~java
 	//BACKPROP
 	double biasChange = 0;
 	public void adjustWeights( double h){
