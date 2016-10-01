@@ -12,7 +12,7 @@ Implemented using Java and Opencv.
 
 Successful training of a sin function to test network
 
-![Training on a sin function](http://i.imgur.com/XI4TMfd.png)
+![Training on a sin function](http://i.imgur.com/WSfWhGs.png)
 
 ![Successful preliminary recognition of characters](http://i.imgur.com/IaHIzbY.png)
 
